@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package auth-service;
+
+import "google/protobuf/timestamp.proto";
+
+service AuthService {
+    rpc Register (RegisterRequest) returns (RegisterReply) {}
+    rpc Login (LoginRequest) returns (LoginReply) {} 
+    rpc ValidateToken (ValidateTokenRequest) returns (ValidateTokenReply) {}
+    rpc Logout (LogoutRequest) returns (LogoutReply) {}
+}
+
+message RegisterRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message RegisterReply {
+    string user_id = 1;
+    google.protobuf.Timestamp created_at = 2;
+}
+
+message LoginRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message LoginReply {
+    string access_token = 1;
+    int64 expires_in = 2;
+}
+
+message ValidateTokenRequest {
+    string token = 1;
+}
+
+message ValidateTokenReply {
+    bool is_valid = 1;
+    string user_id = 2;
+}
+
+message LogoutRequest {
+    string token = 1;
+}
+
+message LogoutReply {
+    string status = 1;
+}
