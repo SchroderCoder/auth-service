@@ -32,3 +32,24 @@ class AuthService:
         self.token_repo.store(token, user.id, expires_in)
 
         return {"access_token": token, "expires_in":expires_in}
+    
+    def validate_token(self, token : str):
+
+        if not token:
+            raise ValueError("Invalid Data")
+        
+        if not self.token_repo.exists(token):
+            raise ValueError("Token is not valid")
+        
+        payload = self.jwt_service.validate(token)
+
+        return payload["sub"] 
+
+    def logout(self, token:str):
+        
+        if not token:
+            raise ValueError("Invalid Data")
+        
+        self.token_repo.delete(token)
+        
+

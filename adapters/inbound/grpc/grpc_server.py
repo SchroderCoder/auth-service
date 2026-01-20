@@ -33,3 +33,27 @@ class GrpcServer(auth_pb2_grpc.AuthServiceServicer):
         
         except ValueError as e:
             ctx.abort(grpc.StatusCode.INVALID_ARGUMENT, str(e))
+
+    def ValidateToken(self, request, ctx):
+        try:
+            user_id = self.auth_service.validate_token(request.token)
+
+            return auth_pb2.ValidateTokenReply(
+                is_valid = True,
+                user_id = user_id
+            ) 
+        
+        except ValueError as e:
+            ctx.abort(grpc.StatusCode.INVALID_ARGUMENT, str(e))
+
+
+    def Logout(self, request, ctx):
+        try:
+            self.auth_service.logout(request.token)
+
+            return auth_pb2.LogoutReply(
+                status = "logged out"
+            )
+        
+        except ValueError as e:
+            ctx.abort(grpc.StatusCode.INVALID_ARGUMENT, str(e))
