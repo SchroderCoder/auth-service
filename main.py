@@ -4,6 +4,7 @@ from adapters.inbound.grpc.grpc_server import GrpcServer
 from adapters.outbound.mongo.user_repository import MongoUserRepository
 from adapters.outbound.redis.token_repository import RedisTokenRepository
 from domain.services.auth_service import AuthService
+from domain.security.jwt_service import JwtService
 from domain.security.password_hasher import PasswordHasher
 import pymongo, redis, os
 import auth_pb2_grpc
@@ -23,7 +24,8 @@ def serve():
     auth_service = AuthService(
         MongoUserRepository(users_collection),
         RedisTokenRepository(redis_client),
-        PasswordHasher()
+        PasswordHasher(),
+        JwtService()
     )
 
     auth_pb2_grpc.add_AuthServiceServicer_to_server(

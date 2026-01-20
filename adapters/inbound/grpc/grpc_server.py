@@ -16,8 +16,20 @@ class GrpcServer(auth_pb2_grpc.AuthServiceServicer):
             ts.GetCurrentTime()
 
             return auth_pb2.RegisterReply(
-                user_id=user["id"],
+                user_id=user.id,
                 created_at=ts
             )
+        except ValueError as e:
+            ctx.abort(grpc.StatusCode.INVALID_ARGUMENT, str(e))
+
+    def Login (self, req, ctx):
+        try:
+            result = self.auth_service.login(req.email, req.password)
+
+            return auth_pb2.LoginReply(
+                access_token = result["access_token"],
+                expires_in = result["expires_in"]
+            )
+        
         except ValueError as e:
             ctx.abort(grpc.StatusCode.INVALID_ARGUMENT, str(e))
