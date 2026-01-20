@@ -1,3 +1,4 @@
+import grpc
 import auth_pb2
 import auth_pb2_grpc
 from google.protobuf.timestamp_pb2 import Timestamp

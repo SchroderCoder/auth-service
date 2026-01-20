@@ -1,4 +1,6 @@
-FROM python:3
+FROM python:3.11-slim
+
+ENV PYTHONPATH="/usr/src/app/adapters/inbound/grpc:/usr/src/app"
 
 WORKDIR /usr/src/app
 
